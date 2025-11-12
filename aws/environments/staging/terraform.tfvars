@@ -1,0 +1,11 @@
+aws_region          = "us-west-2"
+ami_id              = "ami-0c55b159cbfafe1f0"
+db_name              = "stagingdb"
+db_username          = "admin"
+db_instance_class    = "db.t3.micro"
+db_allocated_storage = 50
+alb_name             = "staging-alb"
+server_port         = 8080
+cluster_name        = "staging-cluster"
+instance_type       = "t3.micro"
+desired_capacity    = 2
