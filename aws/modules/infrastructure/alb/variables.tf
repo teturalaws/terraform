@@ -40,6 +40,16 @@ variable "health_check_path" {
   default     = "/"
 }
 
+variable "subnets" {
+  description = "List of subnet IDs for the ALB"
+  type        = list(string)
+}
+
+variable "vpc_id" {
+  description = "VPC ID for the ALB target group"
+  type        = string
+}
+
 variable "health_check_protocol" {
   description = "Protocol for health check"
   type        = string

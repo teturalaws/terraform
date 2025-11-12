@@ -31,6 +31,8 @@ resource "aws_security_group_rule" "alb_egress_all" {
 # Target group
 resource "aws_lb_target_group" "app_tg" {
   name     = "${var.alb_name}-tg"
+  vpc_id   = var.vpc_id
+  target_type = "instance"
   port     = var.server_port
   protocol = "HTTP"
 
@@ -54,6 +56,7 @@ resource "aws_lb" "app_alb" {
   name                       = "${var.alb_name}-alb"
   internal                   = var.internal
   load_balancer_type         = "application"
+  subnets                    = var.subnets
   security_groups            = [aws_security_group.alb.id]
   enable_deletion_protection = var.deletion_protection
 

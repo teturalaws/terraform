@@ -63,8 +63,8 @@ resource "aws_autoscaling_group" "app_asg" {
   desired_capacity    = var.desired_capacity
   max_size            = var.max_size
   min_size            = var.min_size
-  vpc_zone_identifier = var.subnet_ids
-  target_group_arns   = var.target_group_arns
+  vpc_zone_identifier = var.subnets
+  target_group_arns   = [var.target_group_arn]
   health_check_type   = "ELB"
 
   launch_template {

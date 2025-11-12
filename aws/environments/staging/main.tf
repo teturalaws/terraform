@@ -2,6 +2,18 @@ provider "aws" {
   region = var.aws_region
 }
 
+data "aws_vpc" "default" {
+  default = true
+}
+
+# Get all subnets in the default VPC
+data "aws_subnets" "default" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
+}
+
 terraform {
   backend "s3" {
     bucket         = "mytfstate-teturalaws"        # Change to your unique bucket name
@@ -24,7 +36,8 @@ module "mysql" {
 
 module "alb" {
   source = "../../modules/infrastructure/alb"
-
+  subnets = data.aws_subnets.default.ids
+  vpc_id  = data.aws_vpc.default.id
   alb_name            = var.alb_name
   server_port         = var.server_port
 }
@@ -35,13 +48,15 @@ module "autoscaling" {
   cluster_name = var.cluster_name
   instance_type = var.instance_type
   desired_capacity = var.desired_capacity
+  target_group_arn = module.alb.target_group_arn
+  subnets = data.aws_subnets.default.ids
   db_address = module.mysql.address
   db_port    = module.mysql.port
 }
 
 resource "aws_security_group_rule" "allow_testing_inbound"{
   type = "ingress"
-  security_group_id = module.autoscaling.alb_security_group_id
+  security_group_id = module.autoscaling.ws_security_group
   from_port = 12345
   to_port = 12345
   protocol = "tcp"

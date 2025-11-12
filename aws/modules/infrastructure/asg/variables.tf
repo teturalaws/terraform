@@ -49,3 +49,13 @@ variable "min_size" {
   type        = number
   default     = 1
 }
+
+variable "subnets" {
+  description = "List of subnet IDs for the ASG"
+  type        = list(string)
+}
+
+variable "target_group_arn" {
+  description = "ARN of the target group for the ASG"
+  type        = string
+}
